@@ -216,3 +216,15 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Model checkpoints — hosted on Kaggle
+*.pt
+*.pth
+
+# Data and images — hosted on Kaggle
+data/
+images/
+
+# Credentials
+kaggle.json
+.kaggle/
