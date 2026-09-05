@@ -2,7 +2,7 @@
 
 Multi-label classification of 14 thoracic pathologies from chest radiographs, with Grad-CAM localization evaluated against radiologist-drawn bounding boxes.
 
-Samsung Innovation Campus AI Capstone — Team Core.
+Samsung Innovation Campus · Misk — Team Core.
 
 Dataset: NIH ChestX-ray14, a stratified 31,077-image subset covering 11,907 patients.
 
@@ -39,6 +39,16 @@ Patients holding radiologist-annotated bounding boxes are withheld from the clas
       convnext-tiny-320-training.ipynb   ConvNeXt-Tiny training, 320x320, threshold tuning, calibration, robustness
     docs/
       convnext_experiment_summary.md     Full write-up of the ConvNeXt-Tiny run: config, results, BCE vs focal loss, robustness
+      frontend_backend_handoff.md        Proposed frontend/backend integration contract and open decisions
+    frontend/
+      README.md                          Frontend status, local run instructions, and integration notes
+      index.html                         Landing page
+      analyze.html                       X-ray analysis interface
+      css/styles.css                     Frontend design system
+      js/config.js                       Frontend configuration and mock/backend switch
+      js/api.js                          API client and response validation
+      js/analyze.js                      Analysis-page UI logic
+      mocks/prediction.json              Mock inference response used before backend integration
     results/                             Per-class thresholds and evaluation output for every model
 
 Notebooks other than `01_data_preparation.ipynb` run on Kaggle. Attach both datasets as inputs, enable a GPU, and run in order.
@@ -71,11 +81,15 @@ The ConvNeXt-Tiny checkpoint referenced by the notebook (`convnext_tiny_320_best
 
 ## Status
 
-Complete — dataset construction, patient-level splitting, DenseNet-121 and ResNet50 baselines, ConvNeXt-Tiny 320 training (BCE and focal-loss variants), per-class evaluation with bootstrap confidence intervals, threshold calibration, probability calibration (ECE), and demographic robustness analysis — all for the ConvNeXt model (see table above).
+**Classification / model pipeline — complete for the current frozen single-model choice.** Dataset construction, patient-level splitting, DenseNet-121 and ResNet50 baselines, ConvNeXt-Tiny 320 training (BCE and focal-loss variants), per-class evaluation with bootstrap confidence intervals, pathology-specific threshold tuning, probability calibration (ECE), and demographic robustness analysis are available in the repository.
 
-In progress / not started — Grad-CAM and IoBB evaluation against the radiologist bounding boxes (`loc_tune` / `loc_report` splits, see Data splits above), inference pipeline, and interface. These are assigned to other team members and out of scope for this update.
+**Frontend — implemented in mock mode.** The user interface is built with plain HTML, CSS, and JavaScript and currently supports the landing page, X-ray upload flow, sorted flagged findings, all 14 model scores, developer diagnostics, and a prototype summary export. It intentionally does not duplicate PyTorch preprocessing or inference logic in the browser.
 
-Results are reported once the full pipeline is complete.
+**Integration — pending.** The frontend is waiting for the final FastAPI request/response contract and class-specific Grad-CAM delivery format before `MOCK_MODE` is switched off. The proposed contract and open integration decisions are documented in `docs/frontend_backend_handoff.md`.
+
+**Grad-CAM / IoBB and backend work are separate team workstreams.** Their implementation status should be updated in this README when those artifacts are merged into the repository.
+
+The final application must remain a research/educational prototype and should not be presented as a clinically validated diagnostic system.
 
 ---
 
