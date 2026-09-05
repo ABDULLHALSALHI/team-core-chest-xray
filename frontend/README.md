@@ -103,9 +103,8 @@ The UI currently allows:
 
 - PNG
 - JPG / JPEG
-- PDF
 
-**Integration note:** model inference is image-based. PDF support must be confirmed with the backend before final integration. If the backend does not support PDFs, the UI should either disable PDF upload or the backend should explicitly convert an agreed PDF page to an image.
+PDF uploads are not supported because model inference requires an image file.
 
 ## Integration contract
 
