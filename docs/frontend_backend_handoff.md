@@ -175,17 +175,9 @@ The frontend currently accepts:
 ```text
 PNG
 JPG / JPEG
-PDF
 ```
 
-### Open decision: PDF support
-
-The model pipeline is image-based. Please confirm one of the following before final integration:
-
-1. Backend supports PDF and converts the agreed page to an image, or
-2. Frontend removes PDF from the accepted file types.
-
-Do not silently process PDFs differently without documenting the rule.
+PDF uploads are intentionally disabled because the model pipeline is image-based.
 
 ---
 
@@ -220,8 +212,7 @@ Before switching `MOCK_MODE` to `false`:
 - [ ] prediction JSON shape confirmed
 - [ ] exact 14-label order confirmed
 - [ ] error response confirmed
-- [ ] accepted file types confirmed
-- [ ] PDF decision confirmed
+- [x] accepted file types confirmed: PNG and JPG/JPEG only
 - [ ] Grad-CAM endpoint / response format confirmed
 - [ ] CORS or single-origin serving confirmed
 - [ ] one real X-ray tested end to end
