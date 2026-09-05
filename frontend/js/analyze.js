@@ -7,7 +7,6 @@ const loadingState = document.getElementById("loadingState");
 const errorMessage = document.getElementById("errorMessage");
 const resultsSection = document.getElementById("resultsSection");
 const xrayPreview = document.getElementById("xrayPreview");
-const pdfPreview = document.getElementById("pdfPreview");
 const flaggedFindings = document.getElementById("flaggedFindings");
 const noFindingCard = document.getElementById("noFindingCard");
 const resultSummaryBadge = document.getElementById("resultSummaryBadge");
@@ -90,20 +89,8 @@ function showFilePreview(file) {
     clearPreviewUrl();
 
     currentPreviewUrl = URL.createObjectURL(file);
-
-    if (file.type === "application/pdf") {
-        xrayPreview.classList.add("hidden");
-        xrayPreview.removeAttribute("src");
-
-        pdfPreview.src = currentPreviewUrl;
-        pdfPreview.classList.remove("hidden");
-    } else {
-        pdfPreview.classList.add("hidden");
-        pdfPreview.removeAttribute("src");
-
-        xrayPreview.src = currentPreviewUrl;
-        xrayPreview.classList.remove("hidden");
-    }
+    xrayPreview.src = currentPreviewUrl;
+    xrayPreview.classList.remove("hidden");
 }
 
 xrayInput.addEventListener("change", () => {
@@ -120,8 +107,7 @@ xrayInput.addEventListener("change", () => {
 
     const allowedTypes = [
         "image/png",
-        "image/jpeg",
-        "application/pdf"
+        "image/jpeg"
     ];
 
     if (!allowedTypes.includes(file.type)) {
@@ -131,7 +117,7 @@ xrayInput.addEventListener("change", () => {
         analyzeButton.disabled = true;
 
         showError(
-            "Unsupported file format. Please upload a PNG, JPG, JPEG, or PDF chest X-ray."
+            "Unsupported file format. Please upload a PNG, JPG, or JPEG chest X-ray."
         );
         return;
     }
@@ -140,7 +126,7 @@ xrayInput.addEventListener("change", () => {
     latestUploadedFileName = file.name;
 
     uploadTitle.textContent = file.name;
-    uploadSubtitle.textContent = `${(file.size / 1024 / 1024).toFixed(2)} MB · ${file.type === "application/pdf" ? "PDF" : "Image"}`;
+    uploadSubtitle.textContent = `${(file.size / 1024 / 1024).toFixed(2)} MB · Image`;
 
     analyzeButton.disabled = false;
     showFilePreview(file);
@@ -461,3 +447,4 @@ document.addEventListener("keydown", (event) => {
         closeDevDrawer();
     }
 });
+
