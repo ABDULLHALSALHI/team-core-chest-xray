@@ -37,9 +37,13 @@ Patients holding radiologist-annotated bounding boxes are withheld from the clas
       04_resnet50_baseline.ipynb         ResNet50 training, 224x224
       05_resnet_evaluation.ipynb         ResNet50 scored with the same pipeline
       convnext-tiny-320-training.ipynb   ConvNeXt-Tiny training, 320x320, threshold tuning, calibration, robustness
+      convnext-gradcam-localization.ipynb Grad-CAM heatmaps and IoBB / IoU localization evaluation
     docs/
       convnext_experiment_summary.md     Full write-up of the ConvNeXt-Tiny run: config, results, BCE vs focal loss, robustness
       frontend_backend_handoff.md        Proposed frontend/backend integration contract and open decisions
+      gradcam_iobb_summary.md            Grad-CAM localization protocol, threshold selection, and results
+    src/
+      gradcam.py                         Reusable Grad-CAM, IoBB, and IoU code
     frontend/
       README.md                          Frontend status, local run instructions, and integration notes
       index.html                         Landing page
@@ -49,7 +53,7 @@ Patients holding radiologist-annotated bounding boxes are withheld from the clas
       js/api.js                          API client and response validation
       js/analyze.js                      Analysis-page UI logic
       mocks/prediction.json              Mock inference response used before backend integration
-    results/                             Per-class thresholds and evaluation output for every model
+    results/                             Per-class thresholds, evaluation output for every model, and Grad-CAM localization results
 
 Notebooks other than `01_data_preparation.ipynb` run on Kaggle. Attach both datasets as inputs, enable a GPU, and run in order.
 
@@ -87,7 +91,7 @@ The ConvNeXt-Tiny checkpoint referenced by the notebook (`convnext_tiny_320_best
 
 **Integration — pending.** The frontend is waiting for the final FastAPI request/response contract and class-specific Grad-CAM delivery format before `MOCK_MODE` is switched off. The proposed contract and open integration decisions are documented in `docs/frontend_backend_handoff.md`.
 
-**Grad-CAM / IoBB and backend work are separate team workstreams.** Their implementation status should be updated in this README when those artifacts are merged into the repository.
+**Grad-CAM / IoBB localization — complete.** Class-specific Grad-CAM heatmaps from the final ConvNeXt-Tiny model are evaluated against radiologist-drawn bounding boxes for all 8 annotated pathologies. The heatmap threshold is tuned on `loc_tune` by mean IoU (T = 0.55) and reported once on `loc_report` (373 image-class pairs): mean IoBB 0.326, mean IoU 0.179, IoBB ≥ 0.25 for 42.1% of pairs against 32.2% for a centre-box control. Effusion, Atelectasis, Mass, and Pneumonia clearly beat the control; Cardiomegaly is explained mostly by the heart's central position. Full protocol and per-class results are in `docs/gradcam_iobb_summary.md` and `notebooks/convnext-gradcam-localization.ipynb`.
 
 The final application must remain a research/educational prototype and should not be presented as a clinically validated diagnostic system.
 
